@@ -2,11 +2,12 @@
 
 This is one of my fun project that was written for Raspberry PI using OpenCV Python to access OneDrive. This is a miniature version of surveillance system, which takes timelapse photos using Raspberry PI and Camera, and/ or record video and upload it to Microsoft Cloud OneDrive using REST API.
 
-Accessing Onedrive storage space needs access token.  In order to get the token users has to manually authenticate via the web browser which will not be possible if you are using your Raspberry PI as a headless node (i.e. with out monitor/keyboard attached), running in console mode. There are two issues that I've tackled with the below approach:
+- Accessing Onedrive storage space needs access token.  In order to get the token users has to manually authenticate via the web browser which will not be possible if you are using your Raspberry PI as a headless node (i.e. with out monitor/keyboard attached), running in console mode. There are two issues that I've tackled with the below approach:
 
-To bypass this issue of user intercation with web browser via Raspberry PI, I've used the "Selenium" package which is well suited for simulating/automating GET/POST on any web browsers. (scripts to invoke/click/fill information on the  website).
+- To bypass this issue of user intercation with web browser via Raspberry PI, I've used the "Selenium" package which is well suited for simulating/automating GET/POST on any web browsers. (scripts to invoke/click/fill information on the  website).
 
-Another issue is, the interface required for filling text box and button clicks on HTML Pages. I've used phantomJS webdriver to achieve this.  This package allows the user to render HTML/Javascript/CSS via virtual display i.e in MEMORY which will render the html tags.
+- Another issue is, the interface required for filling text box and button clicks on HTML Pages. I've used phantomJS webdriver to achieve this.  This package allows the user to render HTML/Javascript/CSS via virtual display i.e in MEMORY which will render the html tags.
+
 
 Using these pacakges Raspberry PI can virtually authenticate itself without any external user interaction or clicking of buttons.
 
@@ -26,7 +27,7 @@ Get Application Secrets  which is assigned to client_secret and Client Id (App I
 
 OneDrive API Reference  https://dev.onedrive.com/app-registration.htm
 
-# Update needed in the code:
+# Update the following in the code:
   1. Copy & Paste Authentication details from the Onedrive developer console.
   2. Update email address and passwword variables in the script.
   3. Modify local, remote folder variable names to be used.

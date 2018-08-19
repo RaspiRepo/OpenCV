@@ -93,62 +93,51 @@ def get_onedrive_access_token (user_name, password):
     #driver.set_window_size(1120, 550)
     driver.get(auth_url)
 
-    # login name loginfmt
-    # password field passwd
-    # Button "SI"
-    #print(auth_url)
-    #print(driver.current_url)
 
+    #it may vary depends on your network speed and location
     driver.implicitly_wait(30)
 
     login_field = driver.find_element_by_name("loginfmt")
-    password_field = driver.find_element_by_name("passwd")
-    sign_btn = driver.find_element_by_id("idSIButton9")
-
-    """ Debug lines
-    print(login_field)
-    print(password_field)
-    print(sign_btn)
-    """
-
-
-    #Fill user name and password
     login_field.send_keys(user_name)
-    password_field.send_keys (password)
+    next_btn = driver.find_element(By.ID, "idSIButton9")
+    next_btn.click()
+    time.sleep(5)
+
+    password_field = driver.find_element_by_name("passwd")
+    password_field.send_keys(password)
+
 
     print("Onedrive authntication in progress....")
     try:
-        #send sign-in process
-        #sign_btn.send_keys("Click", Keys.RETURN)
-        sign_btn.click()
 
-        #print("Onedrive authntication Sign in Click")
+        signin_btn = driver.find_element(By.ID, "idSIButton9")
+        signin_btn.click()
+        driver.implicitly_wait(5)  # seconds, may changes needed depends on Internet connection speed
+        idBtn_Accept = driver.find_element(By.ID, "idBtn_Accept")
+        idBtn_Accept.click()
 
-        ################# AFER SUCCESSfull LOGIN ######
-        driver.implicitly_wait(15)  # seconds, may changes needed depends on Internet connection speed
+        driver.implicitly_wait(5)  # seconds, may changes needed depends on Internet connection speed
 
-        #find Access permission "yes" button and accept
-        element = driver.find_element_by_name('ucaccept')#driver.find_element_by_id("idBtn_Accept")
-        #element.send_keys("Yes", Keys.RETURN)
-        element.click()
+        #parse URL to get code and close the browser
+        tokens = driver.current_url.split('=')
+        driver.quit()
+
+        #print(tokens[1].split('&')[0])
+        access_code = tokens[1].split('&')[0]
+
+        #print("access code is here ", access_code)
+
+        #authenticate the client
+        client.auth_provider.authenticate(access_code, redirect_uri, client_secret)
+
+        #we dont need webdriver any more
+        driver.quit()
 
     #if there is any error screen shot createdhere
     except Exception as e:
         screenshot_name = "exception.png"
         driver.get_screenshot_as_file(screenshot_name)
         print("Screenshot saved as '%s'" % screenshot_name)
-
-    #parse URL to get code and close the browser
-    tokens = driver.current_url.split('=')
-    driver.quit()
-
-    #print(tokens[1].split('&')[0])
-    access_code = tokens[1].split('&')[0]
-
-    #print("access code is here ", access_code)
-
-    #authenticate the client
-    client.auth_provider.authenticate(access_code, redirect_uri, client_secret)
 
     return client
 
